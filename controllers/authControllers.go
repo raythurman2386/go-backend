@@ -1,10 +1,10 @@
 package controllers
 
 import (
-	"encoding/json"
-	"go-backend/models"
-	u "go-backend/utils"
 	"net/http"
+	u "go-backend/utils"
+	"go-backend/models"
+	"encoding/json"
 )
 
 var CreateAccount = func(w http.ResponseWriter, r *http.Request) {
