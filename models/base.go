@@ -2,16 +2,16 @@ package models
 
 import (
 	"fmt"
-	"os"
-
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/postgres"
 	"github.com/joho/godotenv"
+	"os"
 )
 
-var db *gorm.db
+var db *gorm.DB
 
 func init() {
+
 	e := godotenv.Load()
 	if e != nil {
 		fmt.Print(e)
@@ -26,13 +26,12 @@ func init() {
 	fmt.Println(dbUri)
 
 	conn, err := gorm.Open("postgres", dbUri)
-
 	if err != nil {
-		fmt.Println(err)
+		fmt.Print(err)
 	}
 
 	db = conn
-	db.Debug().AutoMigrate(&Account{}, &Contact{}) // Database migration
+	db.Debug().AutoMigrate(&Account{}, &Contact{})
 }
 
 func GetDB() *gorm.DB {

@@ -1,27 +1,32 @@
 package models
 
 import (
-	u "lens/utils"
-	"os"
-	"strings"
-
 	"github.com/dgrijalva/jwt-go"
+	u "go-backend/utils"
+	"strings"
 	"github.com/jinzhu/gorm"
+	"os"
 	"golang.org/x/crypto/bcrypt"
 )
 
+/*
+JWT claims struct
+*/
 type Token struct {
 	UserId uint
 	jwt.StandardClaims
 }
 
+//a struct to rep user account
 type Account struct {
 	gorm.Model
 	Email string `json:"email"`
+	Password string `json:"password"`
 	Token string `json:"token";sql:"-"`
 }
 
-func (account *Account) Validate() (map[string]interface{}, bool) {
+//Validate incoming user details...
+func (account *Account) Validate() (map[string] interface{}, bool) {
 
 	if !strings.Contains(account.Email, "@") {
 		return u.Message(false, "Email address is required"), false
@@ -46,7 +51,7 @@ func (account *Account) Validate() (map[string]interface{}, bool) {
 	return u.Message(false, "Requirement passed"), true
 }
 
-func (account *Account) Create() map[string]interface{} {
+func (account *Account) Create() (map[string] interface{}) {
 
 	if resp, ok := account.Validate(); !ok {
 		return resp
@@ -74,7 +79,7 @@ func (account *Account) Create() map[string]interface{} {
 	return response
 }
 
-func Login(email, password string) map[string]interface{} {
+func Login(email, password string) (map[string]interface{}) {
 
 	account := &Account{}
 	err := GetDB().Table("accounts").Where("email = ?", email).First(account).Error
